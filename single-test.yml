@@ -1,0 +1,19 @@
+# version of docker-compose
+version: '3.9'
+
+# 'services' are equivalent to 'containers'
+services:
+  test-redis:
+    container_name: cache
+    image: 'redis:alpine'
+  test-webapp:
+    restart: on-failure
+    build: ./web
+    ports:
+      - '80:5000'
+    links:
+      - test-redis
+    environment:
+      - NODE_ENV=development
+      - PORT=5000
+      - REDIS_URL=redis://test-redis
